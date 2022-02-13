@@ -160,7 +160,7 @@ const HomePage = () => {
             <Stack gap={2}>
               {nodes.map(node => (
                 <Stack key={node.type} spacing={4} direction="row" alignItems="center">
-                  <img height={64} width={64} alt={node.label} src={`src/images/${node.type}.png`} />
+                  <img height={64} width={64} alt={node.label} src={`/images/${node.type}.png`} />
                   <Slider
                     aria-label={`${node.label}-slider`}
                     valueLabelDisplay="auto"
@@ -221,7 +221,7 @@ const HomePage = () => {
               <Grid container columns={4} gap={2}>
                 {nodes.map(node => (
                   <Grid key={node.type} flex={1} item>
-                    <NodeControl {...node} imgSrc={`src/images/${node.type}.png`} />
+                    <NodeControl {...node} imgSrc={`/images/${node.type}.png`} />
                   </Grid>
                 ))}
               </Grid>
@@ -257,7 +257,7 @@ const HomePage = () => {
                 <Grid key={node.type} flex={1} item>
                   <NodeControl
                     {...node}
-                    imgSrc={`src/images/${node.type}.png`}
+                    imgSrc={`/images/${node.type}.png`}
                     value={results.nodeDistribution[node.type] || 0}
                   />
                 </Grid>
