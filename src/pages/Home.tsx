@@ -26,7 +26,7 @@ import NodeControl from '../components/NodeControl';
 import simulate from '../simulator';
 import { dateDiff } from '../utils';
 
-import { Node, NodeDistribution, NodeConfig, SimulationResults, Wallet } from '../interfaces';
+import { Node, NodeDistribution, NodeConfig, SimulationResults, Wallet, Log } from '../interfaces';
 
 const nodeConfig: NodeConfig = {
   lesser: {
@@ -84,6 +84,8 @@ const HomePage = () => {
   const [coinPrice, setCoinPrice] = useState<string>('99.33');
   const [wallet, setWallet] = useState<Wallet<string>>({ PENT: '0', MATIC: '15' });
   const [avgGasPrice, setAvgGasPrice] = useState<string>('0.01');
+  const [logPage, setLogPage] = useState(1);
+  const [logPageSize, setLogPageSize] = useState(7);
 
   const [results, setResults] = useState<SimulationResults>();
 
@@ -92,6 +94,17 @@ const HomePage = () => {
     const simulationResults = simulate(startDate, numOfDays, nodeConfig, nodeDistribution, wallet);
     setResults(simulationResults);
   };
+
+  let pagedKeys: string[] = [];
+  let logPageCount = 1;
+
+  if (results?.log) {
+    logPageCount = Math.ceil(Object.keys(results.log).length / logPageSize);
+
+    const start = (logPage - 1) * logPageSize;
+    const end = start + logPageSize;
+    pagedKeys = Object.keys(results.log).slice(start, end);
+  }
 
   return (
     <Box sx={{ display: 'flex', pb: 5 }}>
@@ -263,13 +276,12 @@ const HomePage = () => {
                 </Grid>
               ))}
             </Grid>
-
-            {results.log && (
+            {results && results.log && (
               <div>
                 <Typography variant="h6" gutterBottom>
                   Log
                 </Typography>
-                {Object.entries(results.log).map(([key, logs], index) => (
+                {pagedKeys.map(key => (
                   <Accordion key={key}>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
@@ -279,14 +291,21 @@ const HomePage = () => {
                       <Typography>{key}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      {logs.map((entry, entryIndex) => (
-                        <Typography key={`${key}-entry-{entryIndex}`}>{entry}</Typography>
-                      ))}
+                      {results.log &&
+                        results.log[key].map((entry, entryIndex) => (
+                          <Typography key={`${key}-entry-${entryIndex}`}>{entry}</Typography>
+                        ))}
                     </AccordionDetails>
                   </Accordion>
                 ))}
-                <Box sx={{ mt: 2 }}>
-                  <Pagination count={10} />
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+                  <Pagination
+                    count={logPageCount}
+                    page={logPage}
+                    onChange={(_event, value) => {
+                      setLogPage(value);
+                    }}
+                  />
                 </Box>
               </div>
             )}
