@@ -42,6 +42,7 @@ const simulate = (
 
   let smallestNodeToBuy = nodeConfig['lesser'];
   for (let day = 1; day < numDays; day++) {
+    globalDay = day;
     const date = new Date(startDate?.getTime());
     date.setHours(startDate.getHours() + day * 24);
     const dailyLog: DailyLog = [];
@@ -85,7 +86,7 @@ const simulate = (
     }
 
     // Daily rewards
-    const newRewards = simulateRewards(nodeConfig, nodeDistribution);
+    const newRewards = simulateRewards(nodeConfig, _nodeDistribution);
     dailyRewards['PENT'] = newRewards;
     dailyRewards['USD'] = newRewards * CURRENCY_PENT_USD;
 
@@ -100,7 +101,7 @@ const simulate = (
     log[date.toISOString().split('T')[0]] = dailyLog;
   }
 
-  return { log, numDays, wallet, dailyRewards, nodeDistribution: _nodeDistribution };
+  return { numDays, wallet, dailyRewards, nodeDistribution: _nodeDistribution };
 };
 
 export default simulate;
