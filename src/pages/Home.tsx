@@ -6,6 +6,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+import Chip from '@mui/material/Chip';
 import Drawer from '@mui/material/Drawer';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -85,7 +86,7 @@ const HomePage = () => {
   const [wallet, setWallet] = useState<Wallet<string>>({ PENT: '0', MATIC: '15' });
   const [avgGasPrice, setAvgGasPrice] = useState<string>('0.01');
   const [logPage, setLogPage] = useState(1);
-  const [logPageSize, setLogPageSize] = useState(7);
+  const [logPageSize] = useState(7);
 
   const [results, setResults] = useState<SimulationResults>();
 
@@ -249,19 +250,65 @@ const HomePage = () => {
                   <Typography variant="h6" gutterBottom>
                     Wallet
                   </Typography>
-                  <Typography>
-                    {results.wallet['PENT']} PENT ({results.wallet['MATIC']} MATIC)
-                  </Typography>
+                  <Stack gap={1}>
+                    <Typography>
+                      {results.wallet['PENT']} PENT{' '}
+                      {results.diff.wallet['PENT'] !== 0 && (
+                        <Chip
+                          size="small"
+                          label={`${results.diff.wallet['PENT'] > 0 ? '+' : ''}${results.diff.wallet['PENT']}`}
+                          color={results.diff.wallet['PENT'] > 0 ? 'success' : 'error'}
+                          variant="outlined"
+                        />
+                      )}
+                    </Typography>
+                    <Typography>
+                      {results.wallet['MATIC']} MATIC{' '}
+                      {results.diff.wallet['MATIC'] !== 0 && (
+                        <Chip
+                          size="small"
+                          label={`${results.diff.wallet['MATIC'] > 0 ? '+' : ''}${results.diff.wallet['MATIC']}`}
+                          color={results.diff.wallet['MATIC'] > 0 ? 'success' : 'error'}
+                          variant="outlined"
+                        />
+                      )}
+                    </Typography>
+                  </Stack>
                 </Paper>
               </Grid>
               <Grid flex={1} item>
                 <Paper variant="outlined" sx={{ backgroundColor: '#1F1F1FAA', py: 2, px: 4, borderRadius: 3 }}>
                   <Typography variant="h6" gutterBottom>
-                    Rewards
+                    Daily Rewards
                   </Typography>
-                  <Typography>
-                    {results.dailyRewards['PENT']} PENT (${results.dailyRewards['USD']})
-                  </Typography>
+                  <Stack gap={1}>
+                    <Typography>
+                      {results.dailyRewards['PENT']} PENT{' '}
+                      {results.diff.dailyRewards['PENT'] !== 0 && (
+                        <Chip
+                          size="small"
+                          label={`${results.diff.dailyRewards['PENT'] > 0 ? '+' : ''}${
+                            results.diff.dailyRewards['PENT']
+                          }`}
+                          color={results.diff.dailyRewards['PENT'] > 0 ? 'success' : 'error'}
+                          variant="outlined"
+                        />
+                      )}
+                    </Typography>
+                    <Typography>
+                      ${results.dailyRewards['USD']}{' '}
+                      {results.diff.dailyRewards['USD'] !== 0 && (
+                        <Chip
+                          size="small"
+                          label={`${results.diff.dailyRewards['USD'] > 0 ? '+' : ''}${
+                            results.diff.dailyRewards['USD']
+                          }`}
+                          color={results.diff.dailyRewards['USD'] > 0 ? 'success' : 'error'}
+                          variant="outlined"
+                        />
+                      )}
+                    </Typography>
+                  </Stack>
                 </Paper>
               </Grid>
             </Grid>
@@ -272,6 +319,7 @@ const HomePage = () => {
                     {...node}
                     imgSrc={`/images/${node.type}.png`}
                     value={results.nodeDistribution[node.type] || 0}
+                    diff={results.diff.nodeDistribution[node.type]}
                   />
                 </Grid>
               ))}

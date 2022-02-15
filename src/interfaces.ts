@@ -1,4 +1,7 @@
 export type NodeType = 'lesser' | 'common' | 'legendary' | 'omega';
+export type NodeDistribution = Record<NodeType, number>;
+export type Wallet<T = string | number> = Record<string, T>;
+
 export interface Node {
   type: NodeType;
   label: string;
@@ -10,9 +13,13 @@ export interface Node {
   limit?: number;
 }
 
-export type NodeDistribution = Record<NodeType, number>;
+export interface Diff {
+  nodeDistribution: NodeDistribution;
+  dailyRewards: Wallet<number>;
+  wallet: Wallet<number>;
+}
+
 export type NodeConfig = Record<NodeType, Node>;
-export type Wallet<T = string | number> = Record<string, T>;
 export type Log = Record<string, DailyLog>;
 export type DailyLog = string[];
 
@@ -22,4 +29,5 @@ export type SimulationResults = {
   wallet: Wallet<number>;
   nodeDistribution: NodeDistribution;
   dailyRewards: Wallet<number>;
+  diff: Diff;
 };

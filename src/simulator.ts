@@ -1,6 +1,36 @@
-import { NodeDistribution, NodeConfig, SimulationResults, Wallet, NodeType, Log, DailyLog } from './interfaces';
+import { NodeDistribution, NodeConfig, SimulationResults, Wallet, NodeType, Log, DailyLog, Diff } from './interfaces';
 
-function claimAll(pendingRewards: number[]) {
+function getWalletDiff(start: Wallet<number>, end: Wallet<number>): Wallet<number> {
+  const diff: Wallet<number> = {};
+
+  Object.keys(start).forEach(key => {
+    diff[key] = Math.round(((end[key] || 0) - (start[key] || 0)) * 10000) / 10000;
+  });
+
+  return diff;
+}
+
+function getDailyRewardDiff(start: Wallet<number>, end: Wallet<number>): Wallet<number> {
+  const diff: Wallet<number> = {};
+
+  Object.keys(start).forEach(key => {
+    diff[key] = Math.round(((end[key] || 0) - (start[key] || 0)) * 10000) / 10000;
+  });
+
+  return diff;
+}
+
+function getDistributionDiff(start: NodeDistribution, end: NodeDistribution): NodeDistribution {
+  const diff: NodeDistribution = { lesser: 0, common: 0, legendary: 0, omega: 0 };
+
+  Object.keys(start).forEach(key => {
+    diff[key as NodeType] = (end[key as NodeType] || 0) - (start[key as NodeType] || 0);
+  });
+
+  return diff;
+}
+
+function claimAll(pendingRewards: number[]): number {
   let rewards = 0;
   while (pendingRewards.length) {
     rewards += pendingRewards.pop() || 0;
@@ -8,7 +38,7 @@ function claimAll(pendingRewards: number[]) {
   return rewards;
 }
 
-function simulateRewards(nodeConfig: NodeConfig, nodeDistribution: NodeDistribution) {
+function simulateRewards(nodeConfig: NodeConfig, nodeDistribution: NodeDistribution): number {
   let rewards = 0;
 
   for (const [type, count] of Object.entries(nodeDistribution)) {
@@ -32,6 +62,7 @@ const simulate = (
     (acc, [key, value]) => ({ ...acc, [key]: parseInt(value) }),
     {}
   );
+  const startWallet = { ...wallet };
 
   const dailyRewards: SimulationResults['dailyRewards'] = {};
 
@@ -40,9 +71,14 @@ const simulate = (
   const log: Log = {};
   const pendingRewards: number[] = [];
 
+  // Record rewards at start to calculate diff
+  const rewardsStart: Wallet<number> = {};
+  const pentRewards = simulateRewards(nodeConfig, _nodeDistribution);
+  rewardsStart['PENT'] = pentRewards;
+  rewardsStart['USD'] = pentRewards * CURRENCY_PENT_USD;
+
   let smallestNodeToBuy = nodeConfig['lesser'];
   for (let day = 1; day < numDays; day++) {
-    globalDay = day;
     const date = new Date(startDate?.getTime());
     date.setHours(startDate.getHours() + day * 24);
     const dailyLog: DailyLog = [];
@@ -101,7 +137,13 @@ const simulate = (
     log[date.toISOString().split('T')[0]] = dailyLog;
   }
 
-  return { numDays, wallet, dailyRewards, nodeDistribution: _nodeDistribution };
+  const diff: Diff = {
+    dailyRewards: getDailyRewardDiff(rewardsStart, dailyRewards),
+    nodeDistribution: getDistributionDiff(nodeDistribution, _nodeDistribution),
+    wallet: getWalletDiff(startWallet, wallet),
+  };
+
+  return { log, numDays, wallet, dailyRewards, nodeDistribution: _nodeDistribution, diff };
 };
 
 export default simulate;

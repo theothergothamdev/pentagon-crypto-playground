@@ -12,6 +12,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { Node } from '../interfaces';
 
 interface NodeControlProps extends Node {
+  diff?: number;
   value?: number;
   imgSrc: string;
 }
@@ -26,6 +27,7 @@ const NodeControl = ({
   fusionTarget,
   imgSrc,
   limit = 10,
+  diff = 0,
 }: NodeControlProps) => {
   const [showInfo, setShowInfo] = useState(false);
   const handleInfoToggle = () => setShowInfo(value => !value);
@@ -53,8 +55,14 @@ const NodeControl = ({
         <Stack alignItems="center" justifyContent="center" gap={1}>
           <img height={192} width={192} alt={label} src={imgSrc} />
           {typeof value === 'number' && (
-            <Typography variant="h5" textAlign="center">
-              {value}
+            <Typography sx={{ display: 'flex', alignItems: 'flex-end' }} variant="h5" textAlign="center">
+              {value}{' '}
+              {diff !== 0 && (
+                <Typography sx={{ color: diff > 0 ? 'green' : 'red', ml: 1 }} variant="subtitle2" textAlign="center">
+                  ({diff > 0 ? '+' : ''}
+                  {diff})
+                </Typography>
+              )}
             </Typography>
           )}
           {typeof value === 'undefined' && (
