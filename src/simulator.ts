@@ -48,15 +48,14 @@ function simulateRewards(nodeConfig: NodeConfig, nodeDistribution: NodeDistribut
   return rewards;
 }
 
-const CURRENCY_PENT_USD = 95.48;
-const avgGasPrice = 0.01;
-
 const simulate = (
   startDate: Date,
   numDays: number,
   nodeConfig: NodeConfig,
   nodeDistribution: NodeDistribution,
-  initialWallet: Wallet<string>
+  initialWallet: Wallet<string>,
+  coinPrice: number,
+  avgGasPrice
 ): SimulationResults => {
   const wallet: SimulationResults['wallet'] = Object.entries(initialWallet).reduce(
     (acc, [key, value]) => ({ ...acc, [key]: parseInt(value) }),
@@ -75,7 +74,7 @@ const simulate = (
   const rewardsStart: Wallet<number> = {};
   const pentRewards = simulateRewards(nodeConfig, _nodeDistribution);
   rewardsStart['PENT'] = pentRewards;
-  rewardsStart['USD'] = pentRewards * CURRENCY_PENT_USD;
+  rewardsStart['USD'] = pentRewards * coinPrice;
 
   let smallestNodeToBuy = nodeConfig['lesser'];
   for (let day = 1; day < numDays; day++) {
@@ -124,7 +123,7 @@ const simulate = (
     // Daily rewards
     const newRewards = simulateRewards(nodeConfig, _nodeDistribution);
     dailyRewards['PENT'] = newRewards;
-    dailyRewards['USD'] = newRewards * CURRENCY_PENT_USD;
+    dailyRewards['USD'] = newRewards * coinPrice;
 
     // If we're earning more per day than the current fusion rate then we can just buy the next tier
     if (smallestNodeToBuy.fusionTarget && smallestNodeToBuy.fusionCost && newRewards > smallestNodeToBuy.fusionCost) {

@@ -92,7 +92,15 @@ const HomePage = () => {
 
   const handleGenerateClick = () => {
     const numOfDays = endDate ? dateDiff(startDate, endDate) : 7;
-    const simulationResults = simulate(startDate, numOfDays, nodeConfig, nodeDistribution, wallet);
+    const simulationResults = simulate(
+      startDate,
+      numOfDays,
+      nodeConfig,
+      nodeDistribution,
+      wallet,
+      parseInt(coinPrice),
+      parseInt(avgGasPrice)
+    );
     setResults(simulationResults);
   };
 
