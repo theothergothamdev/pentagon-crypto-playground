@@ -55,7 +55,7 @@ const simulate = (
   nodeDistribution: NodeDistribution,
   initialWallet: Wallet<string>,
   coinPrice: number,
-  avgGasPrice
+  avgGasPrice: number
 ): SimulationResults => {
   const wallet: SimulationResults['wallet'] = Object.entries(initialWallet).reduce(
     (acc, [key, value]) => ({ ...acc, [key]: parseInt(value) }),
