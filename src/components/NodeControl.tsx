@@ -58,7 +58,12 @@ const NodeControl = ({
             <Typography sx={{ display: 'flex', alignItems: 'flex-end' }} variant="h5" textAlign="center">
               {value}{' '}
               {diff !== 0 && (
-                <Typography sx={{ color: diff > 0 ? 'green' : 'red', ml: 1 }} variant="subtitle2" textAlign="center">
+                <Typography
+                  sx={{ color: diff > 0 ? 'green' : 'red', ml: 1 }}
+                  variant="subtitle2"
+                  textAlign="center"
+                  component="span"
+                >
                   ({diff > 0 ? '+' : ''}
                   {diff})
                 </Typography>

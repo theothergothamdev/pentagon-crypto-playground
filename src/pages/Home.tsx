@@ -259,7 +259,7 @@ const HomePage = () => {
                     Wallet
                   </Typography>
                   <Stack gap={1}>
-                    <Typography>
+                    <Typography component="div">
                       {results.wallet['PENT']} PENT{' '}
                       {results.diff.wallet['PENT'] !== 0 && (
                         <Chip
@@ -270,7 +270,7 @@ const HomePage = () => {
                         />
                       )}
                     </Typography>
-                    <Typography>
+                    <Typography component="div">
                       {results.wallet['MATIC']} MATIC{' '}
                       {results.diff.wallet['MATIC'] !== 0 && (
                         <Chip
@@ -286,37 +286,50 @@ const HomePage = () => {
               </Grid>
               <Grid flex={1} item>
                 <Paper variant="outlined" sx={{ backgroundColor: '#1F1F1FAA', py: 2, px: 4, borderRadius: 3 }}>
-                  <Typography variant="h6" gutterBottom>
-                    Daily Rewards
-                  </Typography>
-                  <Stack gap={1}>
-                    <Typography>
-                      {results.dailyRewards['PENT']} PENT{' '}
-                      {results.diff.dailyRewards['PENT'] !== 0 && (
-                        <Chip
-                          size="small"
-                          label={`${results.diff.dailyRewards['PENT'] > 0 ? '+' : ''}${
-                            results.diff.dailyRewards['PENT']
-                          }`}
-                          color={results.diff.dailyRewards['PENT'] > 0 ? 'success' : 'error'}
-                          variant="outlined"
-                        />
-                      )}
-                    </Typography>
-                    <Typography>
-                      ${results.dailyRewards['USD']}{' '}
-                      {results.diff.dailyRewards['USD'] !== 0 && (
-                        <Chip
-                          size="small"
-                          label={`${results.diff.dailyRewards['USD'] > 0 ? '+' : ''}${
-                            results.diff.dailyRewards['USD']
-                          }`}
-                          color={results.diff.dailyRewards['USD'] > 0 ? 'success' : 'error'}
-                          variant="outlined"
-                        />
-                      )}
-                    </Typography>
-                  </Stack>
+                  <Grid container gap={1} columns={2}>
+                    <Grid flex={1} item>
+                      <Typography variant="h6" gutterBottom>
+                        Daily Rewards
+                      </Typography>
+                      <Stack gap={1}>
+                        <Typography component="div">
+                          {results.dailyRewards['PENT']} PENT{' '}
+                          {results.diff.dailyRewards['PENT'] !== 0 && (
+                            <Chip
+                              size="small"
+                              label={`${results.diff.dailyRewards['PENT'] > 0 ? '+' : ''}${
+                                results.diff.dailyRewards['PENT']
+                              }`}
+                              color={results.diff.dailyRewards['PENT'] > 0 ? 'success' : 'error'}
+                              variant="outlined"
+                            />
+                          )}
+                        </Typography>
+                        <Typography component="div">
+                          ${results.dailyRewards['USD']}{' '}
+                          {results.diff.dailyRewards['USD'] !== 0 && (
+                            <Chip
+                              size="small"
+                              label={`${results.diff.dailyRewards['USD'] > 0 ? '+' : ''}${
+                                results.diff.dailyRewards['USD']
+                              }`}
+                              color={results.diff.dailyRewards['USD'] > 0 ? 'success' : 'error'}
+                              variant="outlined"
+                            />
+                          )}
+                        </Typography>
+                      </Stack>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="h6" gutterBottom>
+                        Monthly Rewards
+                      </Typography>
+                      <Stack gap={1}>
+                        <Typography>{Math.round(results.dailyRewards['PENT'] * 30 * 10000) / 10000} PENT </Typography>
+                        <Typography>${results.dailyRewards['USD'] * 30} </Typography>
+                      </Stack>
+                    </Grid>
+                  </Grid>
                 </Paper>
               </Grid>
             </Grid>

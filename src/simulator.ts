@@ -123,7 +123,7 @@ const simulate = (
     // Daily rewards
     const newRewards = simulateRewards(nodeConfig, _nodeDistribution);
     dailyRewards['PENT'] = newRewards;
-    dailyRewards['USD'] = newRewards * coinPrice;
+    dailyRewards['USD'] = Math.round(newRewards * coinPrice * 100) / 100;
 
     // If we're earning more per day than the current fusion rate then we can just buy the next tier
     if (smallestNodeToBuy.fusionTarget && smallestNodeToBuy.fusionCost && newRewards > smallestNodeToBuy.fusionCost) {
@@ -135,6 +135,9 @@ const simulate = (
 
     log[date.toISOString().split('T')[0]] = dailyLog;
   }
+
+  wallet['PENT'] = Math.round(wallet['PENT'] * 100000) / 100000;
+  wallet['MATIC'] = Math.round(wallet['MATIC'] * 100000) / 100000;
 
   const diff: Diff = {
     dailyRewards: getDailyRewardDiff(rewardsStart, dailyRewards),
