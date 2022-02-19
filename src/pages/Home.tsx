@@ -74,15 +74,15 @@ const drawerWidth = 280;
 
 const HomePage = () => {
   const [nodeDistribution, setNodeDistribution] = useState<NodeDistribution>({
-    lesser: 1,
-    common: 0,
-    legendary: 3,
+    lesser: 4,
+    common: 1,
+    legendary: 4,
     omega: 0,
   });
   const [startDate, setStartDate] = useState<Date>(TODAY_DATE);
   const [endDate, setEndDate] = useState<Date | null>(new Date('2022-03-01'));
 
-  const [coinPrice, setCoinPrice] = useState<string>('99.33');
+  const [coinPrice, setCoinPrice] = useState<string>('100');
   const [wallet, setWallet] = useState<Wallet<string>>({ PENT: '0', MATIC: '15' });
   const [avgGasPrice, setAvgGasPrice] = useState<string>('0.01');
   const [logPage, setLogPage] = useState(1);
