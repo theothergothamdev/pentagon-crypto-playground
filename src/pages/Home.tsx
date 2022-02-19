@@ -61,7 +61,7 @@ const nodeConfig: NodeConfig = {
     type: 'omega',
     label: 'Omega',
     limit: 1,
-    dailyReward: 1.1651,
+    dailyReward: 1.898,
   },
 };
 
