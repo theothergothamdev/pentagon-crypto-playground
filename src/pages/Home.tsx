@@ -70,17 +70,22 @@ const nodes: Node[] = Object.values(nodeConfig);
 const TODAY_DATE = new Date();
 TODAY_DATE.setHours(0, 0, 0, 0);
 
+const initialEndDate = new Date();
+initialEndDate.setHours(0, 0, 0, 0);
+initialEndDate.setDate(1);
+initialEndDate.setMonth(initialEndDate.getMonth() + 1);
+
 const drawerWidth = 280;
 
 const HomePage = () => {
   const [nodeDistribution, setNodeDistribution] = useState<NodeDistribution>({
-    lesser: 4,
-    common: 1,
-    legendary: 4,
+    lesser: 0,
+    common: 0,
+    legendary: 7,
     omega: 0,
   });
   const [startDate, setStartDate] = useState<Date>(TODAY_DATE);
-  const [endDate, setEndDate] = useState<Date | null>(new Date('2022-03-01'));
+  const [endDate, setEndDate] = useState<Date | null>(initialEndDate);
 
   const [coinPrice, setCoinPrice] = useState<string>('100');
   const [wallet, setWallet] = useState<Wallet<string>>({ PENT: '0', MATIC: '15' });
@@ -345,39 +350,6 @@ const HomePage = () => {
                 </Grid>
               ))}
             </Grid>
-            {results && results.log && (
-              <div>
-                <Typography variant="h6" gutterBottom>
-                  Log
-                </Typography>
-                {pagedKeys.map(key => (
-                  <Accordion key={key}>
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                    >
-                      <Typography>{key}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      {results.log &&
-                        results.log[key].map((entry, entryIndex) => (
-                          <Typography key={`${key}-entry-${entryIndex}`}>{entry}</Typography>
-                        ))}
-                    </AccordionDetails>
-                  </Accordion>
-                ))}
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                  <Pagination
-                    count={logPageCount}
-                    page={logPage}
-                    onChange={(_event, value) => {
-                      setLogPage(value);
-                    }}
-                  />
-                </Box>
-              </div>
-            )}
           </Stack>
         )}
       </Container>
