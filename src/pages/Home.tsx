@@ -191,7 +191,7 @@ const HomePage = () => {
                   <Slider
                     aria-label={`${node.label}-slider`}
                     valueLabelDisplay="auto"
-                    max={node.limit || 10}
+                    max={node.limit || 30}
                     value={nodeDistribution[node.type]}
                     onChange={(_event, value) =>
                       setNodeDistribution(nodeDistribution => ({ ...nodeDistribution, [node.type]: value as number }))
